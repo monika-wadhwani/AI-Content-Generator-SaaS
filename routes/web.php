@@ -3,6 +3,7 @@
 use App\Http\Controllers\BrandProfileController;
 use App\Http\Controllers\ContentGenerationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -37,6 +38,7 @@ Route::middleware('auth','verified')->group(function () {
         ->name('content-generations.check');
 
     Route::post('/generations/{generation}/retry', [ContentGenerationController::class, 'retry'])->name('content-generations.retry');
+    Route::get('/subscribe', [SubscriptionController::class, 'checkout'])->name('subscription.checkout');
 });
 
 require __DIR__.'/auth.php';

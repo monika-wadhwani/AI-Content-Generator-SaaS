@@ -16,10 +16,15 @@ class ContentGenerationController extends Controller
         return Inertia::render('ContentGenerations/Create',[
             'brandProfile' => $brandProfile,
             'generations' => $generations,
+            'hasReachedLimit' => auth()->user()->hasReachedFreeLimit(),
+            'isSubscribed' => auth()->user()->subscribed('default'),
         ]);
     }
 
     public function store(Request $request, BrandProfile $brandProfile){
+        if(auth()->user()->hasReachedFreeLimit()){
+            return redirect()->back()->with('error', 'You have reached your free plan limit. Please upgrade to continue.');
+        }
         $validated = $request->validate([
             'topic' => 'required|string|max:255',
         ]);

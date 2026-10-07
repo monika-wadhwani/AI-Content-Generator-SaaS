@@ -8,6 +8,8 @@ import { router } from '@inertiajs/vue3';
 const props = defineProps({
     brandProfile: Object,
     generations: Array,
+    hasReachedLimit:Boolean,
+    isSubscribed:Boolean,
 });
 
 const form = useForm({
@@ -83,15 +85,27 @@ const retryGeneration = (generationId) => {
                     </p>
                 </div>
 
+                <div v-if="hasReachedLimit"  class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6 flex items-center justify-between">
+                    <p class="text-amber-800 text-sm">
+                        You've used your free generations for this month. Upgrade to keep creating content.
+                    </p>
+                    <a :href="route('subscription.checkout')" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 whitespace-nowrap ml-4">
+                        Upgrade to Pro
+                    </a>
+                </div>
+         
+                <div v-if="isSubscribed" class="bg-green-50 border border-green-200 rounded-xl p-4 mb-6">
+                    <p class="text-green-800 text-sm">✓ You're on the Pro plan — unlimited generations.</p>
+                </div>
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8">
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         What should we write about?
                     </label>
                     <form @submit.prevent="submit" class="flex gap-3">
                         <input v-model="form.topic" type="text" 
-                            placeholder="e.g. New product launch, seasonal sale..."
+                            placeholder="e.g. New product launch, seasonal sale..." :disabled="hasReachedLimit"
                             class="flex-1 border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
-                        <button type="submit" :disabled="form.processing"
+                        <button type="submit" :disabled="form.processing || hasReachedLimit"
                             class="bg-indigo-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-indigo-700 disabled:opacity-50 transition flex items-center gap-2">
                             <svg v-if="form.processing" class="animate-spin h-4 w-4" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/>
