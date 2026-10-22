@@ -39,6 +39,9 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Dashboard
                                 </NavLink>
+                                <NavLink :href="route('brand-profiles.index')" :active="route().current('brand-profiles.*')">
+                                    Brand Profiles
+                                </NavLink>
                             </div>
                         </div>
 
